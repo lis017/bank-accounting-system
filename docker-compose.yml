@@ -1,0 +1,27 @@
+version: '3.8'
+
+# 과제 실행용 MySQL 8 컨테이너.
+# 실무 환경과 가깝게 맞추기 위해 H2가 아니라 MySQL을 기본으로 사용합니다.
+# Oracle 전환 가능성을 고려해, 애플리케이션 코드에서는 MySQL 전용 문법(LIMIT, ON DUPLICATE KEY UPDATE 등)을
+# 직접 SQL로 작성하지 않고 JPA/JPQL 위주로 작성했습니다.
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: bank-accounting-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: bank_accounting
+      MYSQL_USER: bank
+      MYSQL_PASSWORD: bankpw
+      TZ: Asia/Seoul
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+09:00
+    volumes:
+      - bank-accounting-mysql-data:/var/lib/mysql
+
+volumes:
+  bank-accounting-mysql-data:

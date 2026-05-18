@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: bank-accounting-assignment
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/bank_accounting?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: bank
+    password: bankpw
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    open-in-view: false
+
+  # Spring Batch 메타데이터 테이블 자동 생성.
+  # 운영에서는 보통 always를 끄고 수동으로 스키마를 관리하지만,
+  # 과제 대비 버전에서는 학습/실행 편의를 위해 always로 두었습니다.
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false   # 애플리케이션 시작 시 자동 실행 방지. API/테스트로 명시적 실행.
+
+logging:
+  level:
+    root: INFO
+    com.kakaobank.accounting: DEBUG
+  pattern:
+    # MDC 기반 requestId를 모든 로그에 포함시켜 요청 단위 추적이 가능하게 합니다.
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [requestId=%X{requestId:-N/A}] %logger{36} - %msg%n"
